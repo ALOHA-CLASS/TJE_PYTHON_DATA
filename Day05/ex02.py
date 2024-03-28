@@ -22,8 +22,7 @@ class Student:
     # 객체의 정보가 다른지 확인하는 메소드
     def __ne__(self, obj):
         return self.no != obj.no
-        
-    
+
 # 객체 리스트
 students = [ 
             Student(101, '한성호', '컴퓨터공학과'),
