@@ -1,6 +1,8 @@
 from openpyxl import load_workbook
+import os
 
-path = 'E:/ALOHA/JOEUN/GIT/TJE_PYTHON_DATA/Day09~/Excel'
+program_path = os.path.abspath(__file__)
+path = os.path.dirname(program_path)
 input_file = path + '/input/' + input('입력 파일 : ')
 # sales_2013.xlsx
 

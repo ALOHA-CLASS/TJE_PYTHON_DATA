@@ -1,10 +1,10 @@
 import pandas as pd
+import os
 
-# 입력 및 출력 파일 경로 정의
-path = 'E:/ALOHA/JOEUN/GIT/TJE_PYTHON_DATA/Day09~/Excel'
+program_path = os.path.abspath(__file__)
+path = os.path.dirname(program_path)
 input_file = path + '/input/' + input('입력 파일 : ')
 output_file = path + '/output/' + input('출력 파일 : ')
-
 
 # read_excel() 함수를 사용하여 Excel 파일 읽기
 data_frame = pd.read_excel(input_file, sheet_name='january_2013') 
