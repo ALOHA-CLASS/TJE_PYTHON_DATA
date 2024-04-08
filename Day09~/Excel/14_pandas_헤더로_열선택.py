@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import pandas as pd
 import sys
 
@@ -10,8 +11,10 @@ path = os.path.dirname(program_path)
 input_file = path + '/input/' + input('입력 파일 : ')
 output_file = path + '/output/' + input('출력 파일 : ')
 
-data_frame = pd.read_csv(input_file)
-data_frame_value_matches_pattern = data_frame.ix[data_frame['Invoice Number']\
-.str.startswith("001-"), :]
+data_frame = pd.read_excel(input_file, 'january_2013', index_col=None)
 
-data_frame_value_matches_pattern.to_csv(output_file, index=False)
+data_frame_column_by_name = data_frame.loc[:, ['Customer ID', 'Purchase Date']]
+
+writer = pd.ExcelWriter(output_file)
+data_frame_column_by_name.to_excel(writer, sheet_name='jan_13_output', index=False)
+writer.close()
