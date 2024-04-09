@@ -1,4 +1,5 @@
 # pip install pymysql
+# pip install cryptography
 import pymysql
 
 # MySQL 서버에 접속
@@ -10,17 +11,6 @@ conn = pymysql.connect(
     charset='utf8mb4',
     cursorclass=pymysql.cursors.DictCursor
 )
-
-# try:
-#     if conn.ping(reconnect=True):
-#         print('접속 성공!')
-#     else:
-#         print('접속 실패!')
-# except pymysql.MySQLError as e:
-#     print('MySQL 에러 : ', e)
-# finally:
-#     conn.close()
-
 
 try:
     with conn.cursor() as cursor:
