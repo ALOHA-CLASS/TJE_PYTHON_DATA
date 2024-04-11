@@ -1,4 +1,5 @@
--- Active: 1712576329756@@127.0.0.1@3306@joeun
+-- Active: 1712626980967@@127.0.0.1@3306@joeun
+-- root 계정으로 로그인 후, 실행
 -- 계정 생성
 DROP USER IF EXISTS 'joeun'@'%';
 CREATE USER 'joeun'@'%' IDENTIFIED BY '123456';
@@ -43,7 +44,7 @@ INSERT INTO `joeun`.`학생` ( std_id, name, tel ) VALUES ('A2403', '황조은',
 
 -- 테이블 수정
 -- * 컬럼 추가
-ALTER TABLE `joeun`.`학생` ADD COLUMN 학년 INT;
+ALTER TABLE `joeun`.`학생` ADD COLUMN grade INT;
 
 -- 테이블 삭제
 -- DROP TABLE 학생;
