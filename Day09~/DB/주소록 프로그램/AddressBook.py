@@ -58,19 +58,30 @@
 
 # --------------------------------------------------------
 import sys
+import pymysql
 
+# MySQL 서버에 접속
+conn = pymysql.connect(
+    host='127.0.0.1',
+    user='joeun',
+    password='123456',
+    database='joeun',
+    charset='utf8mb4',
+    cursorclass=pymysql.cursors.DictCursor
+)
 
 # 사람
 class Person:
     # 생성자
-    def __init__(self, name, phone, addr):
+    def __init__(self, no, name, tel, address):
+        self.no = no
         self.name = name
-        self.phone = phone
-        self.addr = addr
+        self.tel = tel
+        self.address = address
         
     # info()
     def info(self):
-        print('{}, {}, {}'.format(self.name, self.phone, self.addr))
+        print('{}, {}, {}, {}'.format(self.no, self.name, self.tel, self.address))
 
 # 주소록
 class AddressBook:
@@ -78,7 +89,7 @@ class AddressBook:
     # 생성자
     def __init__(self):
         self.address_list = []
-        self.file_reader()
+        # self.file_reader()
 
     # csv 파일 읽기
     def file_reader(self):
@@ -160,42 +171,51 @@ class AddressBook:
         phone = input('전화번호 : ')
         addr = input('주소 : ')
         
+        result = 0 
         # 유효성 검사
         if name and phone and addr:
-            person = Person(name, phone, addr)
-            self.address_list.append(person)
-            # csv 파일에 연락처 목록을 생성(overwrite)
-            self.file_generator()
-            print('새 연락처가 등록되었습니다!')
+            person = Person(0, name, phone, addr)
+            result = self.insert_data(person)
         else:
             print('누락된 입력값이 있어 등록되지 않았습니다.')
+
+        if result > 0:
+            print('새 연락처를 등록하였습니다.')
+        else:
+            print('연락처가 등록되지 않았습니다.')
 
     # 주소록 삭제 
     def delete(self):
         print('----- 기존 연락처 삭제 -----')
-        name = input('삭제할 이름 : ')
-        if not name:
-            print('이름이 입력되지 않아 삭제를 취소합니다.')
+        no = input('삭제할 번호 : ')
+        if not no:
+            print('번호가 입력되지 않아 삭제를 취소합니다.')
             return
         # 삭제 여부
         deleted = False
 
-        for i, person in enumerate(self.address_list):
-            # 입력한 이름이 연락처에 존재하면,
-            if name == self.address_list[i].name:
-                phone = self.address_list[i].phone
-                print('검색한 전화번호 : {}'.format(phone))
-                if input('삭제할까요? (Y/N)').upper() == 'N':
-                    continue
+        no = int(no)
 
-                self.address_list.pop(i)    # 해당 연락처 삭제
-                deleted = True
-                print('{} 의 정보를 삭제하였습니다.'.format(name))
-                self.file_generator()       # AddressBook.csv 갱신
-                # break
+        name = ''
+        # 해당 번호로 조회
+        person = self.select_data(no)
 
-        if not deleted:
-            print('{}의 정보가 삭제되지 않았습니다.'.format(name))
+        if person == None:
+            print('입력 번호에 해당하는 주소가 존재하지 않습니다.')
+            return
+
+        # 입력한 번호가 연락처에 존재하면,
+        print('검색한 전화번호 : {}'.format(person.tel))
+        if input('삭제할까요? (Y/N)').upper() == 'N':
+            return
+
+        # 삭제 요청
+        result = self.delete_data(no)
+
+        if result > 0:
+            print('{} 의 정보를 삭제하였습니다.'.format(person.name))
+        else:
+            print('{}의 정보가 삭제되지 않았습니다.'.format(person.name))
 
 
     # 주소록 수정
@@ -248,25 +268,21 @@ class AddressBook:
 
     # 주소록 조회 
     def search(self):
-        # 리스트에서 검색할 연락처 정보를 이름으로 찾아서 출력
-        name = input('검색할 이름 : ')
-        if not name: 
-            print('이름이 입력되지 않아서 조회할 수 없습니다.')
+        
+        no = input('검색할 번호 : ')
+        if not no: 
+            print('번호가 입력되지 않아서 조회할 수 없습니다.')
             return      # 메소드 종료
         
         print('----- 조회된 연락처 정보 -----')
 
-        # 검색 여부
-        searched = False
-        # (0, person1)
-        for i, person in enumerate(self.address_list):
-            # (입력 받은 이름) == (리스트에 있는 이름)  --> 조회 성공-> 출력
-            if name == self.address_list[i].name:
-                person.info()   
-                searched = True
+        # 데이터 조회 요청
+        person = self.select_data(no)
 
-        if not searched:
+        if person == None:
             print('조회된 연락처 없습니다.')
+        else:
+            person.info()
 
 
     # 전체 출력 
@@ -277,11 +293,99 @@ class AddressBook:
         # 1. SELECT * FROM address_book  쿼리 요청
         # 2. 조회 결과를 address_list 에 저장
 
-        for person in self.address_list:
+        address_list = self.select_list()
+
+        for person in address_list:
             person.info()
 
-        list_count = len(self.address_list)
+        list_count = len(address_list)
         print('총 {}개의 연락처가 있습니다.'.format(list_count))
+
+    # 데이터 목록 조회
+    def select_list(self):
+        try:
+            with conn.cursor() as cursor:
+                sql = "SELECT * FROM address_book"
+                cursor.execute(sql)             # DB에 쿼리 요청
+
+                list = cursor.fetchall()    # 결과 
+                address_list = []
+                for person in list:
+                    no = person.get('no')
+                    name = person.get('name')
+                    tel = person.get('tel')
+                    address = person.get('address')
+                    address_list.append( Person(no, name, tel, address) )
+                return address_list
+        except pymysql.MySQLError as e:
+            print('MySQL 에러 : ', e)
+    # 데이터 목록 조회 끝
+
+    # 데이터 등록
+    def insert_data(self, person):
+        try:
+            result = 0
+            # 커서 생성
+            with conn.cursor() as cursor:
+                # 데이터 등록 쿼리 
+                sql = " INSERT INTO address_book (name, tel, address) "\
+                    + " VALUES (%s, %s, %s) "
+                
+                data = (person.name, person.tel, person.address)
+                result = cursor.execute(sql, data)              
+                print('{}행의 데이터 등록 완료'.format(result))
+                
+            # 변경사항 적용
+            conn.commit()
+            return result
+        except pymysql.MySQLError as e:
+            print("데이터 등록 중 에러 발생 : ", e)
+    # 데이터 등록 끝
+
+
+    # 데이터 삭제
+    def delete_data(self, no):
+        try:
+            result = 0
+            # 커서 생성
+            with conn.cursor() as cursor:
+                # 데이터 삭제 쿼리 
+                sql = " DELETE FROM address_book "\
+                    + " WHERE no = %s "
+                
+                result = cursor.execute(sql, no)              
+                print('{}행의 데이터 삭제 완료'.format(result))
+                
+            # 변경사항 적용
+            conn.commit()
+            return result
+        except pymysql.MySQLError as e:
+            print("데이터 삭제 중 에러 발생 : ", e)
+    # 데이터 삭제 끝
+
+
+    # 데이터 조회
+    def select_data(self, no):
+        try:
+            with conn.cursor() as cursor:
+                sql = " SELECT * FROM address_book "\
+                    + " WHERE no = %s "
+                cursor.execute(sql, no)             # DB에 쿼리 요청
+
+                person = cursor.fetchone()    # 결과 
+
+                if person:
+                    no = person.get('no')
+                    name = person.get('name')
+                    tel = person.get('tel')
+                    address = person.get('address')
+                    return Person(no, name, tel, address)
+                else:
+                    return None
+
+        except pymysql.MySQLError as e:
+            print('MySQL 에러 : ', e)
+
 
 # AddressBook 클래스 끝
     
