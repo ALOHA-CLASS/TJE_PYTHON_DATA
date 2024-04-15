@@ -222,48 +222,47 @@ class AddressBook:
     def update(self):
         print('----- 기존 연락처 수정 -----')
         # 1. 수정할 이름 입력
-        name = input('수정할 이름 : ')
-        
+        no = input('수정할 번호 : ')
+        no = int(no)
+
         # 2. 입력여부 체크
-        if not name:
-            print('이름이 입력되지 않아 수정을 취소합니다.')
+        if not no:
+            print('번호가 입력되지 않아 수정을 취소합니다.')
             return
 
-        # 3. 수정 여부 확인 (Y/N)
-        updated = False
+        # 해당 번호로 조회
+        person = self.select_data(no)
 
-        for i, person in enumerate(self.address_list):
-            if name == self.address_list[i].name:
-                phone = self.address_list[i].phone
-                print('수정할 전화번호 : {}'.format(phone))
-                if input('수정할까요? (Y/N)').upper() == 'N':
-                    continue
-                    
-                # 해당 연락처 수정
-                option = input('이름, 전화번호, 주소 중 무엇을 수정하시겠습니까? (이름, 전화번호, 주소)')
-                if option == '이름':
-                    name = input('수정할 이름을 입력하세요: ')
-                    self.address_list[i].name = name
-                elif option == '전화번호':
-                    phone = input('수정할 전화번호을 입력하세요: ')
-                    self.address_list[i].phone = phone
-                elif option == '주소':
-                    addr = input('수정할 주소를 입력하세요: ')
-                    self.address_list[i].addr = addr
-                else:
-                    print('잘못 입력하셨습니다.')
-                    break
+        if person == None:
+            print('입력 번호에 해당하는 주소가 존재하지 않습니다.')
+            return
 
-                updated = True
-                print('주소록이 수정되었습니다!')
-                print('수정된 주소록 정보')
-                self.address_list[i].info()
-                self.file_generator()           # 주소록 갱신
-                break
-            
-        if not updated:
-            print('{} 의 정보가 수정되지 않았습니다.'.format(name))    
-        # 6. csv 파일 갱신
+        # 입력한 번호가 연락처에 존재하면,
+        print('검색한 전화번호 : {}'.format(person.tel))
+
+        # 해당 연락처 수정
+        option = input('이름, 전화번호, 주소 중 무엇을 수정하시겠습니까? (이름, 전화번호, 주소)')
+        if option == '이름':
+            person.name = input('수정할 이름을 입력하세요: ')
+        elif option == '전화번호':
+            person.tel = input('수정할 전화번호을 입력하세요: ')
+        elif option == '주소':
+            person.address = input('수정할 주소를 입력하세요: ')
+        else:
+            print('잘못 입력하셨습니다.')
+
+        # 수정 요청
+        result = 0 
+        # 유효성 검사
+        if person.name and person.tel and person.address:
+            result = self.update_data(person)
+        else:
+            print('누락된 입력값이 있어 등록되지 않았습니다.')
+
+        if result > 0:
+            print('연락처를 수정하였습니다.')
+        else:
+            print('연락처가 수정되지 않았습니다.')
 
 
     # 주소록 조회 
@@ -385,6 +384,32 @@ class AddressBook:
 
         except pymysql.MySQLError as e:
             print('MySQL 에러 : ', e)
+    # 데이터 조회
+
+    # 데이터 수정
+    def update_data(self, person):
+        try:
+            result = 0
+            # 커서 생성
+            with conn.cursor() as cursor:
+                # 데이터 수정 쿼리 
+                sql = " UPDATE address_book "\
+                    + " SET name = %s "\
+                    + "       ,tel = %s "\
+                    + "       ,address = %s "\
+                    + " WHERE no = %s "
+                
+                data = (person.name, person.tel, person.address, person.no)
+                result = cursor.execute(sql, data)              
+                print('{}행의 데이터 수정 완료'.format(result))
+                
+            # 변경사항 적용
+            conn.commit()
+            return result
+        except pymysql.MySQLError as e:
+            print("데이터 수정 중 에러 발생 : ", e)
+    # 데이터 수정 끝
+
 
 
 # AddressBook 클래스 끝
