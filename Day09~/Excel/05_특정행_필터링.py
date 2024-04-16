@@ -1,36 +1,46 @@
-#!/usr/bin/env python3
+from openpyxl import load_workbook      # 엑셀 입력
+from openpyxl import Workbook           # 엑셀 출력         
 import os
-from datetime import datetime
-import openpyxl as px
 
-# 실행 프로그램의 경로
+# 현재 실행 파일 경로 가져오고, 입력파일 지정하기
 program_path = os.path.abspath(__file__)
-# 디렉터리 경로 - 이 안의 input, output 폴더에서 입출력한다.
 path = os.path.dirname(program_path)
-# 입력파일, 출력파일
 input_file = path + '/input/' + input('입력 파일 : ')
-output_file = path + '/output/' + input('출력 파일 : ')
+output_file = path + '/output/' + input('출력 파일 : ')      
 
-output_workbook = px.Workbook()
-output_worksheet = output_workbook.active
-output_worksheet.title = 'jan_2013_output'
 
-sale_amount_column_index = 3
+# 엑셀 통합 문서 열기 (입력)
+workbook = load_workbook(input_file)
+worksheet_name = input('워크시트 이름 : ')
+worksheet = workbook[worksheet_name]
 
-workbook = px.load_workbook(input_file, read_only=True)
-worksheet = workbook['january_2013']
+# 엑셀 출력 객체 생성
+output_workbook = Workbook()
+output_worksheet =  output_workbook.active  # 워크시트 활성화
+output_worksheet.title = input('출력 워크시트 이름 : ')
 
+# 출력 데이터
 data = []
+# 리스트 내포 - 1행의 모든 셀을 반복하여 리스트로 반환
 header = [cell.value for cell in worksheet[1]]
+print(worksheet[0])
 
+# 헤더 추가
 data.append(header)
 
+# 필터링
+# - 1행은 헤더, 2행부터 데이터를 가져와서 반복
 for row in worksheet.iter_rows(min_row=2, values_only=True):
-    if float(row[sale_amount_column_index]) > 1400.0:
+    # row[3] : Sale Amount 열 데이터를 가져와서 1500 보다 크면
+    if float( row[3] ) > 1500.0:
+        # 출력 데이터 리스트에 추가
         data.append(list(row))
 
-for row_index, output_list in enumerate(data, 1):
-    for col_index, value in enumerate(output_list, 1):
-        output_worksheet.cell(row=row_index, column=col_index, value=value)
+# 출력 데이터를 엑셀 파일로 저장
+for row_index, row in  enumerate( data, 1 ):
+    for column_index, value in enumerate(row, 1 ):
+        output_worksheet.cell(row=row_index, column=column_index, value=value)
 
+# 엑셀 통합 문서 저장
 output_workbook.save(output_file)
+

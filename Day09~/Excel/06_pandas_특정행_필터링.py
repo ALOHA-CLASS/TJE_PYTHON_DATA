@@ -1,20 +1,21 @@
-#!/usr/bin/env python3
-import pandas as pd
-import sys
-
+import pandas as pd 
 import os
-# 실행 프로그램의 경로
+
+# 현재 실행 파일 경로 가져오고, 입력파일 지정하기
 program_path = os.path.abspath(__file__)
-# 디렉터리 경로 - 이 안의 input, output 폴더에서 입출력한다.
 path = os.path.dirname(program_path)
-# 입력파일, 출력파일
 input_file = path + '/input/' + input('입력 파일 : ')
-output_file = path + '/output/' + input('출력 파일 : ')
+output_file = path + '/output/' + input('출력 파일 : ')    
 
-data_frame = pd.read_excel(input_file, 'january_2013', index_col=None)
-data_frame_value_meets_condition = \
-	data_frame[data_frame['Sale Amount'].astype(float) > 1400.0]
+# 엑셀 통합 문서의 jaunary_2013 입력하여 데이터프레임으로 반환
+data_frame = pd.read_excel(input_file, sheet_name='january_2013')
 
+# 데이터프레임에서 'Sale Amount' 컬럼(시리즈) 선택하여 
+# 실수형으로 변환 후, 1500 보다 큰 경우의 논리값과 일치하는 행만 필터링
+condition = data_frame['Sale Amount'].astype(float) > 1500.0
+output_data = data_frame[ condition ]
+
+# 파일 출력
 writer = pd.ExcelWriter(output_file)
-data_frame_value_meets_condition.to_excel(writer, sheet_name='jan_13_output', index=False)
+output_data.to_excel(writer, sheet_name='out_january_2013', index=False)
 writer.close()

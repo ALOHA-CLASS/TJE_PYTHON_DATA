@@ -1,25 +1,33 @@
-#!/usr/bin/env python3
+from openpyxl import load_workbook      # 엑셀 입력
+from openpyxl import Workbook           # 엑셀 출력         💛 추가
 import os
-from openpyxl import Workbook
-from openpyxl import load_workbook
 
-# 실행 프로그램의 경로
+# 현재 실행 파일 경로 가져오고, 입력파일 지정하기
 program_path = os.path.abspath(__file__)
-# 디렉터리 경로 - 이 안의 input, output 폴더에서 입출력한다.
 path = os.path.dirname(program_path)
-# 입력파일, 출력파일
 input_file = path + '/input/' + input('입력 파일 : ')
-output_file = path + '/output/' + input('출력 파일 : ')
+output_file = path + '/output/' + input('출력 파일 : ')       # 💛 추가
 
-output_workbook = Workbook()
-output_worksheet = output_workbook.active
-output_worksheet.title = 'jan_2013_output'
 
+# 엑셀 통합 문서 열기 (입력)
 workbook = load_workbook(input_file)
+# january_2013 워크시트만 입력
 worksheet = workbook['january_2013']
 
-for row_index, row in enumerate(worksheet.iter_rows(), 1):
-    for column_index, cell in enumerate(row, 1):
+# 엑셀 출력 객체 생성
+output_workbook = Workbook()
+output_worksheet =  output_workbook.active  # 워크시트 활성화
+output_worksheet.title = 'out_january_2013' # 워크시트 이름 지정
+
+# sales_2013.xlsx 의 january_2013 워크시트를 반복하여
+# output02.xlsx 의 out_january_2013 워키스트로 출력
+# 행 반복
+for row_index, row in  enumerate( worksheet.iter_rows(), 1 ):
+    # 열 반복
+    for column_index, cell in enumerate(row, 1 ):
+        # output_worksheet.cell(row=행, column=열, value=값) : 셀의 값을 지정
         output_worksheet.cell(row=row_index, column=column_index, value=cell.value)
 
+
+# 엑셀 통합 문서 저장
 output_workbook.save(output_file)

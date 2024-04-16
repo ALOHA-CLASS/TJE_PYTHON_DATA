@@ -1,16 +1,16 @@
-#!/usr/bin/env python3
 from openpyxl import load_workbook
-
 import os
 
-# 실행 프로그램의 경로
+# 현재 실행 파일 경로 가져오고, 입력파일 지정하기
 program_path = os.path.abspath(__file__)
-# 디렉터리 경로 - 이 안의 input, output 폴더에서 입출력한다.
 path = os.path.dirname(program_path)
-# 입력파일, 출력파일
 input_file = path + '/input/' + input('입력 파일 : ')
+# 입력 예시 : sales_2013.xlsx
 
+# 엑셀 통합 문서 열기
 workbook = load_workbook(input_file)
-print('Number of worksheets:', len(workbook.sheetnames))
+print('엑셀 통합 문서의 워크시트 수 : ', len(workbook.sheetnames))
 for worksheet in workbook:
-    print("Worksheet name:", worksheet.title, "\tRows:", worksheet.max_row, "\tColumns:", worksheet.max_column)
+    print('워크시트 이름 : ', worksheet.title )
+    print('워크시트 최대 행 수 : ', worksheet.max_row )
+    print('워크시트 최대 열 수 : ', worksheet.max_column )

@@ -1,0 +1,4 @@
+This is a sample text file for translation.
+You can use this file to test the translation program.
+Please make sure to save the translated text to a new file.
+Thank you for using the translation program!
