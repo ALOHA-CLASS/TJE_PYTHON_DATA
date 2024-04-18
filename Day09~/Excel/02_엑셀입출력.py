@@ -1,5 +1,5 @@
 from openpyxl import load_workbook      # 엑셀 입력
-from openpyxl import Workbook           # 엑셀 출력         💛 추가
+from openpyxl import Workbook           # 엑셀 출력         
 import os
 
 # 현재 실행 파일 경로 가져오고, 입력파일 지정하기
