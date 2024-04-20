@@ -1,0 +1,49 @@
+<?xml version='1.0' encoding='utf-8'?>
+<interface version="1.4" author="PygubuDesigner 0.39">
+  <project>
+    <settings>
+      <setting id="name">파이썬 프로그램</setting>
+      <setting id="description">파이썬 프로그램입니다.</setting>
+      <setting id="module_name">pygui</setting>
+      <setting id="template">application</setting>
+      <setting id="main_widget">main_window</setting>
+      <setting id="main_classname">PyGUITest</setting>
+      <setting id="main_menu" />
+      <setting id="output_dir" />
+      <setting id="output_dir2" />
+      <setting id="import_tkvariables">False</setting>
+      <setting id="use_ttk_styledefinition_file">False</setting>
+      <setting id="use_i18n">False</setting>
+      <setting id="all_ids_attributes">False</setting>
+      <setting id="generate_code_onsave">False</setting>
+      <setting id="use_window_centering_code">False</setting>
+      <setting id="ttk_style_definition_file" />
+    </settings>
+    <customwidgets />
+  </project>
+  <object class="tk.Toplevel" id="main_window" named="True">
+    <property name="container">false</property>
+    <property name="geometry">640x480</property>
+    <property name="height">200</property>
+    <property name="relief">flat</property>
+    <property name="title" translatable="yes">프로그램 이름</property>
+    <property name="width">200</property>
+    <child>
+      <object class="ttk.Label" id="label1">
+        <property name="anchor">n</property>
+        <property name="cursor">arrow</property>
+        <property name="font">{나눔스퀘어_ac Bold} 24 {}</property>
+        <property name="padding">10</property>
+        <property name="state">normal</property>
+        <property name="text" translatable="yes">파이썬 프로그램</property>
+        <property name="width">100</property>
+        <layout manager="pack">
+          <property name="side">top</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="pygubu.builder.widgets.toplevelmenu" id="toplevelmenu2" />
+    </child>
+  </object>
+</interface>
