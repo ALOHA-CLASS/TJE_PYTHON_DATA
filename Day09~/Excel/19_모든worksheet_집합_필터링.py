@@ -45,7 +45,7 @@ def work():
     # TODO: 분석
     # 집합으로 특정행 필터링 : [0, 1] index 집합에 대하여
     # Sale Amount 가 1900.0 초과인 집합을 필터링
-    my_sheets = [0, 1]  # 0, 1 index 시트 사용 (1월, 2월 판매액)
+    my_sheets = [0, 2]  # 0, 1 index 시트 사용 (1월, 2월 판매액)
     threshhold = 1900.0
     sales_column_index = 3 # Sale Amount
 

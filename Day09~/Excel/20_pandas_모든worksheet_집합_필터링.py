@@ -1,7 +1,5 @@
 
-from openpyxl import load_workbook      # 엑셀 입력
-from openpyxl import Workbook           # 엑셀 출력      
-from datetime import date
+import pandas as pd 
 
 import tkinter as tk
 from tkinter import filedialog
@@ -34,47 +32,26 @@ def run():
 
 # 데이터 분석
 def work():
-    # 엑셀 통합 문서 열기 (입력)
-    workbook = load_workbook(input_file.get())
-    
-    # 엑셀 출력 객체 생성
-    output_workbook = Workbook()
-    output_worksheet =  output_workbook.active  # 워크시트 활성화
-    output_worksheet.title = 'total_worksheets' # 워크시트 이름 지정
+    # 1월, 2월 시트 집합을 필터링
+    my_sheets = [0, 1]  # index : 0,1 - 1월, 2월 판매액
+    threshold = 1900.0
 
-    # TODO: 분석
-    # 집합으로 특정행 필터링 : [0, 1] index 집합에 대하여
-    # Sale Amount 가 1900.0 초과인 집합을 필터링
-    my_sheets = [0, 1]  # 0, 1 index 시트 사용 (1월, 2월 판매액)
-    threshhold = 1900.0
-    sales_column_index = 3 # Sale Amount
+    # 엑셀 통합 문서의 [0, 1] 시트를 선택하여 데이터프레임으로 반환
+    data_frame = pd.read_excel(input_file.get(), sheet_name=my_sheets, index_col=None)
 
-    first_worksheet = True
-    index = 0
-    # 통합 문서의 모든 워크시트 반복
-    for worksheet in workbook.worksheets:
-        if index in my_sheets:      # 0, 1 시트 집합만 필터링
-            # 첫번째 시트에서 헤더 가져옴
-            if first_worksheet:
-                header_row = [cell.value for cell in worksheet[1]]
-                output_worksheet.append(header_row)
-                first_worksheet = False
-            for row in worksheet.iter_rows(min_row=2, values_only=True):
-                # print(row)
-                output_row = []
-                sale_amount = row[sales_column_index]
-                # Sale Amount > 1900.0
-                if sale_amount > threshhold:
-                    for cell_value in row:
-                        if isinstance(cell_value, date):
-                            cell_value = cell_value.strftime('%Y/%m/%d')
-                        output_row.append(cell_value)
-                    output_worksheet.append(output_row)
-        index += 1 # 워크시트 index 증가
-    workbook.close()
-    # 엑셀 통합 문서 저장
-    output_workbook.save(output_file.get())
+    # ✅ TODO :분석
+    row_list = []
+    for worksheet_name, data in data_frame.items():
+        condition = data['Sale Amount'].replace('$','').replace(',','').astype(float)
+        row_list.append( data[condition > threshold] )
+    filtered_rows = pd.concat(row_list, axis=0, ignore_index=True)
 
+    # 엑셀 출력 객체
+    writer = pd.ExcelWriter(output_file.get())
+    # 데이터프레임을 엑셀 파일로 저장 *index는 미사용
+    filtered_rows.to_excel(writer, sheet_name='total_worksheets', index=False)
+    # 출력 객체 해제
+    writer.close()
 
 
 
