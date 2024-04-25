@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    
+        <script>
+            L_NO_TOUCH = false;
+            L_DISABLE_3D = false;
+        </script>
+    
+    <style>html, body {width: 100%;height: 100%;margin: 0;padding: 0;}</style>
+    <style>#map {position:absolute;top:0;bottom:0;right:0;left:0;}</style>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_18631a17071cde4856b7150b45dc8a3d {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+                .leaflet-container { font-size: 1rem; }
+            </style>
+        
+</head>
+<body>
+    
+    
+            <div class="folium-map" id="map_18631a17071cde4856b7150b45dc8a3d" ></div>
+        
+</body>
+<script>
+    
+    
+            var map_18631a17071cde4856b7150b45dc8a3d = L.map(
+                "map_18631a17071cde4856b7150b45dc8a3d",
+                {
+                    center: [37.4966725, 126.7212089],
+                    crs: L.CRS.EPSG3857,
+                    zoom: 20,
+                    zoomControl: true,
+                    preferCanvas: false,
+                }
+            );
+
+            
+
+        
+    
+            var tile_layer_8a1a84833c99eeeae10412d1df8aa28f = L.tileLayer(
+                "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+                {"attribution": "\u0026copy; \u003ca href=\"https://www.openstreetmap.org/copyright\"\u003eOpenStreetMap\u003c/a\u003e contributors", "detectRetina": false, "maxNativeZoom": 19, "maxZoom": 19, "minZoom": 0, "noWrap": false, "opacity": 1, "subdomains": "abc", "tms": false}
+            );
+        
+    
+            tile_layer_8a1a84833c99eeeae10412d1df8aa28f.addTo(map_18631a17071cde4856b7150b45dc8a3d);
+        
+    
+            var marker_0d4cbf066b48124ba35ae922446b89a0 = L.marker(
+                [37.4966725, 126.7212089],
+                {}
+            ).addTo(map_18631a17071cde4856b7150b45dc8a3d);
+        
+    
+        var popup_a813ea38eacc1ac73341084dd7b7f5ec = L.popup({"maxHeight": 120, "maxWidth": 300});
+
+        
+            
+                var html_53be3c5acab2aaca02b4d572aaa6dc9a = $(`<div id="html_53be3c5acab2aaca02b4d572aaa6dc9a" style="width: 100.0%; height: 100.0%;">인천시 부평구</div>`)[0];
+                popup_a813ea38eacc1ac73341084dd7b7f5ec.setContent(html_53be3c5acab2aaca02b4d572aaa6dc9a);
+            
+        
+
+        marker_0d4cbf066b48124ba35ae922446b89a0.bindPopup(popup_a813ea38eacc1ac73341084dd7b7f5ec)
+        ;
+
+        
+    
+    
+            var marker_7c981ee9e2f6696a25f12910a7f7335d = L.marker(
+                [37.4966725, 126.7212089],
+                {}
+            ).addTo(map_18631a17071cde4856b7150b45dc8a3d);
+        
+    
+            var div_icon_fd33d3f2f184d7bf3cf85d6184e3463d = L.divIcon({"className": "empty", "html": "\u003cdiv style = \"width: 200px; height: 50px; line-height: 50px; font-size: 20px; background-color: white; text-align: center; transform: translate(-50%, 20px); border-radius: 20px; border: 1px solid black;\" \u003e\u003cb\u003e\ubd80\ud3c9\uc5ed\u003c/b\u003e\u003c/div\u003e"});
+            marker_7c981ee9e2f6696a25f12910a7f7335d.setIcon(div_icon_fd33d3f2f184d7bf3cf85d6184e3463d);
+        
+</script>
+</html>

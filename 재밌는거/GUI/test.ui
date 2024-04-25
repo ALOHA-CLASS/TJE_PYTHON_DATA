@@ -1,0 +1,91 @@
+<?xml version='1.0' encoding='utf-8'?>
+<interface version="1.4" author="PygubuDesigner 0.39.1">
+  <project>
+    <settings>
+      <setting id="name">test</setting>
+      <setting id="description">test</setting>
+      <setting id="module_name">test</setting>
+      <setting id="template">application</setting>
+      <setting id="main_widget">main_window</setting>
+      <setting id="main_classname">test</setting>
+      <setting id="main_menu" />
+      <setting id="output_dir" />
+      <setting id="output_dir2" />
+      <setting id="import_tkvariables">False</setting>
+      <setting id="use_ttk_styledefinition_file">False</setting>
+      <setting id="use_i18n">False</setting>
+      <setting id="all_ids_attributes">False</setting>
+      <setting id="generate_code_onsave">False</setting>
+      <setting id="use_window_centering_code">False</setting>
+      <setting id="ttk_style_definition_file" />
+    </settings>
+    <customwidgets />
+  </project>
+  <object class="tk.Toplevel" id="main_window" named="True">
+    <property name="cursor">arrow</property>
+    <property name="height">400</property>
+    <property name="minsize">600|300</property>
+    <property name="width">200</property>
+    <child>
+      <object class="ttk.Label" id="label1">
+        <property name="compound">bottom</property>
+        <property name="cursor">arrow</property>
+        <property name="font">TkDefaultFont</property>
+        <property name="justify">left</property>
+        <property name="padding">20</property>
+        <property name="state">normal</property>
+        <property name="text" translatable="yes">프로그램 제목</property>
+        <layout manager="pack">
+          <property name="side">top</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="pygubu.builder.widgets.toplevelmenu" id="toplevelmenu1">
+        <child>
+          <object class="tk.Menu" id="menu1">
+            <child>
+              <object class="tk.Menuitem.Submenu" id="submenu1">
+                <property name="label" translatable="yes">파일</property>
+                <child>
+                  <object class="tk.Menuitem.Command" id="command1">
+                    <property name="compound">top</property>
+                    <property name="font">TkDefaultFont</property>
+                    <property name="hidemargin">true</property>
+                    <property name="label" translatable="yes">프로그램 종료</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="ttk.Entry" id="entry1">
+        <property name="font">{나눔고딕} 16 {}</property>
+        <layout manager="pack">
+          <property name="side">top</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="ttk.Entry" id="entry3">
+        <property name="font">{나눔고딕} 16 {}</property>
+        <layout manager="pack">
+          <property name="side">top</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="ttk.Button" id="button1">
+        <property name="command" type="command" cbtype="simple">action_select</property>
+        <property name="text" translatable="yes">조회</property>
+        <property name="width">30</property>
+        <layout manager="pack">
+          <property name="side">top</property>
+        </layout>
+      </object>
+    </child>
+  </object>
+</interface>
