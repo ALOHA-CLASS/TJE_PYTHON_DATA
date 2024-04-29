@@ -27,8 +27,9 @@ gmaps_api_key = 'AIzaSyDa_9XcZixmykF2y95JyJCZravaIvqdPPU'
 gmaps = googlemaps.Client(key=gmaps_api_key)
 
 # address = '대한민국 인천광역시 부평구 경원대로 1366'
-address = input('주소 : ')
-name = input('위치 이름 : ')
+# address = input('주소 : ')
+# name = input('위치 이름 : ')
+address = '대한민국'
 
 g_result = gmaps.geocode(address, language='ko')
 print(g_result)
